@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public interface AdvertiserRepository extends CrudRepository<Advertiser, Long> {
-    //make points dynamic ?
-    @Query(value = "SELECT *, point(19.4414, 41.3231) <@>  (point(longitude, latitude)::point) as distance FROM geofence g where distance<20 ORDER BY distance;", nativeQuery = true)
-    List<Advertiser> findAdvertiserLists(Double lat, Double longitude);
+    @Query(value = "SELECT id, \"name\", latitude, longitude, url, url_code, advertiser, away_from_geo_center, shop_url, geofence_id " +
+            "FROM public.advertiser where geofence_id =:", nativeQuery = true)
+    List<Advertiser> findAdvertiserLists(String geofenceId);
 
 }

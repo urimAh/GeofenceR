@@ -16,7 +16,9 @@
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
+
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.geotools/gt-opengis -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,6 +79,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
 	</dependencies>
 
 	<build>

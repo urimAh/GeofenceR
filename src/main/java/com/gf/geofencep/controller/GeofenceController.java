@@ -1,9 +1,11 @@
 package com.gf.geofencep.controller;
+
 import com.gf.geofencep.models.GeoCoordinates;
 import com.gf.geofencep.repositories.GeofenceRepository;
 import com.gf.geofencep.services.GeoFenceServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -21,21 +23,24 @@ public class GeofenceController {
     }
 
     @DeleteMapping("/geofences/{id}")
-    private void deleteLocation(@PathVariable("id") int id)
-    {
+    private void deleteLocation(@PathVariable("id") int id) {
         geofenceRep.deleteById((long) id);
     }
 
     @PostMapping("/newGeofence")
-    private String saveLocation(@RequestBody GeoCoordinates geoCoordinates)
-    {
-        geoFenceServiceImplementation.saveOrUpdate(geoCoordinates);
-        return geoCoordinates.getLat().toString().concat(" : "+geoCoordinates.getLongitude());
+    private String saveLocation(@RequestBody GeoCoordinates geoCoordinates) {
+        //check if it is already busy
+        int isGeofenceAvailable = geoFenceServiceImplementation.isGeofeceAvailableImplementation(geoCoordinates);
+        if (isGeofenceAvailable!=0) {
+            return "Geofence Location is not avaiable";
+        } else {
+            geoFenceServiceImplementation.saveOrUpdate(geoCoordinates);
+            return geoCoordinates.getLat().toString().concat(" : " + geoCoordinates.getLongitude());
+        }
     }
 
     @PutMapping("/updateGeofence")
-    private GeoCoordinates update(@RequestBody GeoCoordinates geoCoordinates)
-    {
+    private GeoCoordinates update(@RequestBody GeoCoordinates geoCoordinates) {
         geoFenceServiceImplementation.saveOrUpdate(geoCoordinates);
         return geoCoordinates;
     }
