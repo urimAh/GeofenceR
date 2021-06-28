@@ -14,13 +14,11 @@ public interface GeofenceRepository extends CrudRepository<GeoCoordinates, Long>
     int isGeofenceAvailable(Double latitude, Double longitude, double radius);
 
 
-    //ST_GeomFromText('POINT(-77.181044 39.010056)', 4326 (4326 is srid)
     @Query(value = "SELECT id FROM geofence g where  " +
             "(st_contains(geometry(g.geometry),(SELECT ST_SetSRID( ST_Point( :latitude,:longitude), 4326)\\:\\:geometry)))=true ", nativeQuery = true)
     Optional<List<Integer>> getrespectiveGeofenceForRequiredAdvertiser(Double latitude, Double longitude);
 
 
-    //996520.69330547
     @Query(value = "SELECT ST_Distance((select geometry from geofence where id=:id),(SELECT ST_SetSRID( ST_Point( :latitude,:longitude), 4326)\\:\\:geometry))", nativeQuery = true)
     String getDistanceFromCenter(int id,Double latitude, Double longitude);
 }
