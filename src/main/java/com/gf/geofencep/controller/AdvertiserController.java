@@ -23,19 +23,17 @@ public class AdvertiserController {
 
 
     @PostMapping("/newAdvertiser")
-    private String saveAdvertiser(@RequestBody Advertiser advertiser) throws IOException {
+    public Advertiser saveAdvertiser(@RequestBody Advertiser advertiser) throws IOException {
         int code=getUrlResponseCode(advertiser.getShopUrl());
         advertiser.setUrlCode(code);
         Optional<List<Integer>> geofenceId=geofenceRepository.getrespectiveGeofenceForRequiredAdvertiser(advertiser.getLatitude(),advertiser.getLongitude());
         if(geofenceId.isPresent()&&geofenceId.get().size()>0){
             advertiser.setGeofenceId(geofenceId.get().get(0));
-            System.out.println(geofenceId.get().get(0));
             String distanceFromCenter=geofenceRepository.getDistanceFromCenter(geofenceId.get().get(0),advertiser.getLatitude(),advertiser.getLongitude());
-            System.out.println("----- "+distanceFromCenter);
             if(distanceFromCenter!=null)advertiser.setAwayFromGeoCenter(Double.valueOf(distanceFromCenter));
         }
         advertiserRepository.save(advertiser);
-        return "";
+        return advertiser;
     }
 
 

@@ -1,11 +1,14 @@
 package com.gf.geofencep.controller;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gf.geofencep.models.GeoCoordinates;
 import com.gf.geofencep.repositories.GeofenceRepository;
 import com.gf.geofencep.services.GeoFenceServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,7 +34,7 @@ public class GeofenceController {
     private String saveLocation(@RequestBody GeoCoordinates geoCoordinates) {
         //check if it is already busy
         int isGeofenceAvailable = geoFenceServiceImplementation.isGeofeceAvailableImplementation(geoCoordinates);
-        if (isGeofenceAvailable!=0) {
+        if (isGeofenceAvailable != 0) {
             return "Geofence Location is not avaiable";
         } else {
             geoFenceServiceImplementation.saveOrUpdate(geoCoordinates);
@@ -43,5 +46,14 @@ public class GeofenceController {
     private GeoCoordinates update(@RequestBody GeoCoordinates geoCoordinates) {
         geoFenceServiceImplementation.saveOrUpdate(geoCoordinates);
         return geoCoordinates;
+    }
+
+
+    public static class JsonUtil {
+        public static byte[] toJson(Object object) throws IOException {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            return mapper.writeValueAsBytes(object);
+        }
     }
 }
