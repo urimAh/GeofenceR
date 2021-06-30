@@ -1,5 +1,5 @@
-# FROM openjdk:8-jre-alpine
-# ENV TZ=Europe/Rome
-# ARG JAR_FILE
-# ADD ${JAR_FILE} app.jar
-# ENTRYPOINT ["java","-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap","-Djava.security.egd=file:/dev/./urandom","-agentlib:jdwp=server=y,transport=dt_socket,address=9000,suspend=n","-jar","/app.jar"]
+FROM openjdk:8-jre-alpine
+ENV TZ=Europe/Rome
+ARG JAR_FILE=*.jar
+COPY ${JAR_FILE} application.jar
+ENTRYPOINT ["java", "-jar", "application.jar"]
